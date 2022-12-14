@@ -14,13 +14,13 @@ var client = &http.Client{
 func main() {
 
 	service := services.NewBotService(client)
-	err := service.SendMessage("4643482", "71ac64b3-850c-37b4-419c-ee3646dfb974", "バンダについて教えてください")
+	err := service.SendMessage("", "", "")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	//err := service.VerifySignature("H3qoCRcjAtlKLbYiGoT3bfFyLqcLhS4U6vZ8JSqzYHs=", "原神について教えてください")
+	//err := service.VerifySignature("=", "")
 	//if err != nil {
 	//	fmt.Println(err)
 	//	return
