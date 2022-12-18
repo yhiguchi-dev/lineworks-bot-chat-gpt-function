@@ -46,7 +46,7 @@ func (b botService) SendMessage(botId, channelId, message string) error {
 	completionRequest := openai.CompletionRequest{
 		Model:     "text-davinci-003",
 		Prompt:    message,
-		MaxTokens: 4000,
+		MaxTokens: 2000,
 	}
 	completionResponse, err := openaiApi.Completions(completionRequest)
 	if err != nil {
