@@ -5,7 +5,6 @@ import (
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	"log"
 	"net/http"
-	"os"
 	"time"
 	"yhiguchi.dev/lineworksbotchatgpt/internal/services"
 )
@@ -51,8 +50,7 @@ func messageEventCallback(w http.ResponseWriter, r *http.Request) {
 
 	botId := r.Header.Get("X-WORKS-BotId")
 	log.Printf("channelId:" + request.Source.ChannelId)
-	channelId := os.Getenv("CHANNEL_ID")
-	err = service.SendMessage(botId, channelId, request.Content.Text)
+	err = service.SendMessage(botId, request.Source.ChannelId, request.Content.Text)
 	if err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return

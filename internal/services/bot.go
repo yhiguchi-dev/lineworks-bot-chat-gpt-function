@@ -33,6 +33,9 @@ func (b botService) VerifySignature(signature string, body any) error {
 }
 
 func (b botService) SendMessage(botId, channelId, message string) error {
+	if channelId == "" {
+		return fmt.Errorf("invalid channel id")
+	}
 	if strings.HasPrefix(message, "/off") {
 		return nil
 	}
