@@ -50,7 +50,12 @@ func messageEventCallback(w http.ResponseWriter, r *http.Request) {
 
 	botId := r.Header.Get("X-WORKS-BotId")
 	log.Printf("channelId:" + request.Source.ChannelId)
-	err = service.SendMessage(botId, request.Source.ChannelId, request.Content.Text)
+	sendMessageRequest := services.SendMessageRequest{
+		BotId:     botId,
+		ChannelId: request.Source.ChannelId,
+		UserId:    request.Source.UserId,
+	}
+	err = service.SendMessage(sendMessageRequest, request.Content.Text)
 	if err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return

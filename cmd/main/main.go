@@ -14,7 +14,12 @@ var client = &http.Client{
 func main() {
 
 	service := services.NewBotService(client)
-	err := service.SendMessage("", "", "")
+	sendMessageRequest := services.SendMessageRequest{
+		BotId:     "botId",
+		ChannelId: "request.Source.ChannelId",
+		UserId:    "request.Source.UserId",
+	}
+	err := service.SendMessage(sendMessageRequest, "")
 	if err != nil {
 		fmt.Println(err)
 		return

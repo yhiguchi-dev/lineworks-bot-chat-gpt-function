@@ -12,11 +12,17 @@ import (
 
 type BotService interface {
 	VerifySignature(signature string, body any) error
-	SendMessage(botId, channelId, message string) error
+	SendMessage(request SendMessageRequest, message string) error
 }
 
 type botService struct {
 	client *http.Client
+}
+
+type SendMessageRequest struct {
+	BotId     string
+	ChannelId string
+	UserId    string
 }
 
 func (b botService) VerifySignature(signature string, body any) error {
@@ -32,10 +38,7 @@ func (b botService) VerifySignature(signature string, body any) error {
 	return nil
 }
 
-func (b botService) SendMessage(botId, channelId, message string) error {
-	if channelId == "" {
-		return fmt.Errorf("invalid channel id")
-	}
+func (b botService) SendMessage(request SendMessageRequest, message string) error {
 	if strings.HasPrefix(message, "/off") {
 		return nil
 	}
@@ -91,7 +94,14 @@ func (b botService) SendMessage(botId, channelId, message string) error {
 			Text string
 		}{Type: "text", Text: choices[0].Text}),
 	}
-	err = lineworksApi.Messages(botId, channelId, messageRequest)
+	if request.ChannelId == "" {
+		err = lineworksApi.MessagesByUserId(request.BotId, request.UserId, messageRequest)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	err = lineworksApi.MessagesByChannelId(request.BotId, request.ChannelId, messageRequest)
 	if err != nil {
 		return err
 	}

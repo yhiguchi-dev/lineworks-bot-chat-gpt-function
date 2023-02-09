@@ -8,7 +8,8 @@ import (
 )
 
 type Api interface {
-	Messages(botId string, channelId string, messageRequest MessageRequest) error
+	MessagesByChannelId(botId string, channelId string, messageRequest MessageRequest) error
+	MessagesByUserId(botId string, userId string, messageRequest MessageRequest) error
 }
 
 type api struct {
@@ -17,7 +18,7 @@ type api struct {
 	url         string
 }
 
-func (a api) Messages(botId string, channelId string, messageRequest MessageRequest) error {
+func (a api) MessagesByChannelId(botId string, channelId string, messageRequest MessageRequest) error {
 	requestBytes, err := json.Marshal(messageRequest)
 	if err != nil {
 		return err
@@ -25,6 +26,34 @@ func (a api) Messages(botId string, channelId string, messageRequest MessageRequ
 	req, err := http.NewRequest(
 		"POST",
 		fmt.Sprintf("%s/v1.0/bots/%s/channels/%s/messages", a.url, botId, channelId),
+		bytes.NewBuffer(requestBytes),
+	)
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", a.accessToken))
+
+	res, err := a.client.Do(req)
+	if err != nil {
+		return err
+	}
+	fmt.Println(res.StatusCode)
+	if res.StatusCode != http.StatusCreated {
+		return fmt.Errorf("不正なAPIリクエストです")
+	}
+	return nil
+}
+
+func (a api) MessagesByUserId(botId string, userId string, messageRequest MessageRequest) error {
+	requestBytes, err := json.Marshal(messageRequest)
+	if err != nil {
+		return err
+	}
+	req, err := http.NewRequest(
+		"POST",
+		fmt.Sprintf("%s/v1.0/bots/%s/users/%s/messages", a.url, botId, userId),
 		bytes.NewBuffer(requestBytes),
 	)
 	if err != nil {
