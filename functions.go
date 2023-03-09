@@ -55,7 +55,7 @@ func messageEventCallback(w http.ResponseWriter, r *http.Request) {
 		ChannelId: request.Source.ChannelId,
 		UserId:    request.Source.UserId,
 	}
-	err = service.SendMessage(sendMessageRequest, request.Content.Text)
+	err = service.SendChatMessage(sendMessageRequest, request.Content.Text)
 	if err != nil {
 		http.Error(w, "invalid request", http.StatusBadRequest)
 		return
