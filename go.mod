@@ -2,10 +2,10 @@ module yhiguchi.dev/lineworksbotchatgpt
 
 go 1.19
 
-require github.com/GoogleCloudPlatform/functions-framework-go v1.5.2
+require github.com/GoogleCloudPlatform/functions-framework-go v1.7.4
 
 require (
-	github.com/cloudevents/sdk-go/v2 v2.6.1 // indirect
+	github.com/cloudevents/sdk-go/v2 v2.14.0 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect
